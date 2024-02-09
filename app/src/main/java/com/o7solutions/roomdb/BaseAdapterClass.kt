@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-class BaseAdapterClass(var arrayList: ArrayList<String>,var arrayDate: ArrayList<String>): BaseAdapter() {
+class BaseAdapterClass(var arrayList: ArrayList<TodoEntity>): BaseAdapter() {
     override fun getCount(): Int {
        return arrayList.size
     }
@@ -23,8 +23,8 @@ class BaseAdapterClass(var arrayList: ArrayList<String>,var arrayDate: ArrayList
         var initView = LayoutInflater.from(p2?.context).inflate(R.layout.item_adapter,p2,false)
         var tvName :TextView = initView.findViewById(R.id.tv_Task)
         var tvDate :TextView = initView.findViewById(R.id.tv_Date)
-        tvName.setText(arrayList[p0])
-        tvDate.setText(arrayDate[p0])
+        tvName.setText(arrayList[p0].id.toString())
+        tvDate.setText(arrayList[p0].todoItem.toString())
         return initView
     }
 }

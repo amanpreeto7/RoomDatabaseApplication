@@ -14,9 +14,8 @@ import androidx.room.RoomDatabase
 @Database(entities = [TodoEntity::class], version = 1)
 abstract class TodoDatabase  : RoomDatabase(){
     abstract fun todoDao() : ToDoDao
-    companion object{
+    companion object {
         var todoDatabase : TodoDatabase ?= null
-
         @Synchronized
         fun getDatabaseInstance(context: Context) : TodoDatabase {
             if(todoDatabase == null){

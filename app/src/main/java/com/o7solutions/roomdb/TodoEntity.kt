@@ -12,5 +12,5 @@ import androidx.room.PrimaryKey
 data class TodoEntity(
     @PrimaryKey(autoGenerate = true)
     var id : Int = 0,
-    var todo: String ?= null
+    var todoItem: String ?= null
 )
