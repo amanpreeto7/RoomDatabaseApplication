@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Room DB</string>
+    <string name="choose_date_time">Choose Date and Enter Data</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.o7solutions.roomdb
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.DatePicker
@@ -12,17 +14,25 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.o7solutions.roomdb.databinding.ActivityMainBinding
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     var todoEntityList = arrayListOf<TodoEntity>()
     var baseAdapter: BaseAdapterClass = BaseAdapterClass(todoEntityList)
     lateinit var todoDatabase: TodoDatabase
+    var simpleDateFormat = SimpleDateFormat("dd/MMM/yyyy, hh:mm:ss")
+    var serverDate = "2022-03-07T06:52:04.438Z"
+    var serverDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        var date = serverDateFormat.parse(serverDate)
+        Log.e("TAG","parsed Date $date")
         todoDatabase = TodoDatabase.getDatabaseInstance(this)
 
 //        todoEntityList.addAll(todoDatabase.todoDao().getTodoEntities())
@@ -33,25 +43,36 @@ class MainActivity : AppCompatActivity() {
             dialog.setContentView(R.layout.custom_alert_dialogue)
             val etEnterUpdate = dialog.findViewById<EditText>(R.id.etEnterupdate)
             val btnUpdate = dialog.findViewById<Button>(R.id.btnUpdate)
-            val datePicker = dialog.findViewById<DatePicker>(R.id.dp)
+            val etSelectDate = dialog.findViewById<EditText>(R.id.etSelectDate)
+            etSelectDate.setOnClickListener{
+                var calendar = Calendar.getInstance()
+                DatePickerDialog(this, {_, year, month,dateOfMonth->
+                                       println("Date is $year $month $dateOfMonth")
+                    //calendar.set(year, month, dateOfMonth)
+                    calendar.set(Calendar.YEAR, year)
+                    calendar.set(Calendar.MONTH, month)
+                    calendar.set(Calendar.DAY_OF_MONTH, month)
+                    var formattedDate = simpleDateFormat.format(calendar.time)
+                    etSelectDate.setText(formattedDate)
+                },
+                    (1900+date.year), date.month, date.date
+                    /*calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH),*/  ).show()
+            }
             btnUpdate.setOnClickListener {
                 if (etEnterUpdate.text.toString().isEmpty()) {
                     etEnterUpdate.error = "Enter Text"
                     return@setOnClickListener
                 }
-                val day = datePicker.dayOfMonth
-                val month = datePicker.month
-                val year = datePicker.year
-                if (day == 0 || month == 0 || year == 0) {
-                    Toast.makeText(this, "Pick Date ", Toast.LENGTH_SHORT).show()
-                } else {
-                    // arrayTask.add(etEnterUpdate.text.toString())
-                    todoDatabase.todoDao()
-                        .insertTodo(TodoEntity(todoItem = etEnterUpdate.text.toString()))
+                // arrayTask.add(etEnterUpdate.text.toString())
+                todoDatabase.todoDao()
+                    .insertTodo(TodoEntity(todoItem = etEnterUpdate.text.toString()))
 //                    arrayDate.add("$day/$month/$year")
-                    baseAdapter.notifyDataSetChanged()
-                    dialog.dismiss()
-                }
+//                baseAdapter.notifyDataSetChanged()
+                getDatabaseValues()
+                dialog.dismiss()
+
             }
             dialog.show()
         }
@@ -85,8 +106,12 @@ class MainActivity : AppCompatActivity() {
                     tv_Date_Detail?.error = "Enter Date "
                 } else {
                     todoDatabase.todoDao()
-                        .updateTodoEntity(TodoEntity(id = todoEntityList[position].id,
-                        todoItem = tv_Task_Detail?.text.toString()))
+                        .updateTodoEntity(
+                            TodoEntity(
+                                id = todoEntityList[position].id,
+                                todoItem = tv_Task_Detail?.text.toString()
+                            )
+                        )
                     dialog.dismiss()
                     getDatabaseValues()
                 }
