@@ -21,6 +21,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter Task"/>
+    <EditText
+        android:layout_marginTop="10dp"
+        android:id="@+id/etSelectTime"
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Task"/>
 
     <EditText
         android:layout_marginTop="10dp"

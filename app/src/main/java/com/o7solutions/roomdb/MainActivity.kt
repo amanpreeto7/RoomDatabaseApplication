@@ -3,6 +3,7 @@ package com.o7solutions.roomdb
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.TimePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     var simpleDateFormat = SimpleDateFormat("dd/MMM/yyyy, hh:mm:ss")
     var serverDate = "2022-03-07T06:52:04.438Z"
     var serverDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-
+    var calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +45,12 @@ class MainActivity : AppCompatActivity() {
             val etEnterUpdate = dialog.findViewById<EditText>(R.id.etEnterupdate)
             val btnUpdate = dialog.findViewById<Button>(R.id.btnUpdate)
             val etSelectDate = dialog.findViewById<EditText>(R.id.etSelectDate)
+            val etSelectTime = dialog.findViewById<EditText>(R.id.etSelectTime)
+            var nextDate = Calendar.getInstance()
+            nextDate.add(Calendar.MINUTE, +15)
+
+            Log.e("TAG", "with 15 minutes $nextDate")
             etSelectDate.setOnClickListener{
-                var calendar = Calendar.getInstance()
                 DatePickerDialog(this, {_, year, month,dateOfMonth->
                                        println("Date is $year $month $dateOfMonth")
                     //calendar.set(year, month, dateOfMonth)
@@ -59,6 +64,19 @@ class MainActivity : AppCompatActivity() {
                     /*calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH),*/  ).show()
+            }
+            etSelectTime.setOnClickListener{
+                TimePickerDialog(this, {_, hour, minute->
+                                       println("Date is $hour $minute")
+                    //calendar.set(year, month, dateOfMonth)
+                    calendar.set(Calendar.HOUR, hour)
+                    calendar.set(Calendar.MINUTE, minute)
+                    var formattedDate = simpleDateFormat.format(calendar.time)
+                    etSelectTime.setText(formattedDate)
+                },
+//                    (1900+date.year), date.month, date.date
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE), true  ).show()
             }
             btnUpdate.setOnClickListener {
                 if (etEnterUpdate.text.toString().isEmpty()) {
