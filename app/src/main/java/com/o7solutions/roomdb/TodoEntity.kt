@@ -2,6 +2,8 @@ package com.o7solutions.roomdb
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Calendar
+import java.util.Date
 
 /**
  * @Author: 017
@@ -12,5 +14,6 @@ import androidx.room.PrimaryKey
 data class TodoEntity(
     @PrimaryKey(autoGenerate = true)
     var id : Int = 0,
-    var todoItem: String ?= null
+    var todoItem: String ?= null,
+    var date : Date ?= Calendar.getInstance().time
 )

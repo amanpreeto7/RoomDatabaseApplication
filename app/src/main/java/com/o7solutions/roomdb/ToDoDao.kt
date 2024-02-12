@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import java.util.Date
 
 /**
  * @Author: 017
@@ -24,4 +25,7 @@ interface ToDoDao {
 
     @Delete
     fun deleteTodoEntity(todoEntity: TodoEntity)
+
+    @Query("SELECT * FROM todoentity where date = :date")
+    fun getSelectedData(date: Date) : List<TodoEntity>
 }

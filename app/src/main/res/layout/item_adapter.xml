@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="todo"
+            type="com.o7solutions.roomdb.TodoEntity" />
+
+        <variable
+            name="name"
+            type="String" />
+    </data>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -12,7 +23,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DATE"
+            android:text="@{todo.date.toString()}"
             android:textSize="20dp"
             android:textStyle="bold"
             android:padding="20dp"
@@ -21,13 +32,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Content"
+            android:text="@{todo.todoItem}"
             android:textSize="20dp"
             android:padding="20dp"
             android:id="@+id/tv_Task"
             />
     </LinearLayout>
-
-
-
+    
 </LinearLayout>
+</layout>

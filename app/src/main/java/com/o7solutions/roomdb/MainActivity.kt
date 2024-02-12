@@ -21,13 +21,12 @@ import java.util.Calendar
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     var todoEntityList = arrayListOf<TodoEntity>()
-    var baseAdapter: BaseAdapterClass = BaseAdapterClass(todoEntityList)
+    var baseAdapter: BaseAdapterClass = BaseAdapterClass(todoEntityList, this)
     lateinit var todoDatabase: TodoDatabase
     var simpleDateFormat = SimpleDateFormat("dd/MMM/yyyy, hh:mm:ss")
     var serverDate = "2022-03-07T06:52:04.438Z"
     var serverDateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     var calendar = Calendar.getInstance()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -85,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 // arrayTask.add(etEnterUpdate.text.toString())
                 todoDatabase.todoDao()
-                    .insertTodo(TodoEntity(todoItem = etEnterUpdate.text.toString()))
+                    .insertTodo(TodoEntity(todoItem = etEnterUpdate.text.toString(), date = calendar.time))
 //                    arrayDate.add("$day/$month/$year")
 //                baseAdapter.notifyDataSetChanged()
                 getDatabaseValues()
@@ -145,6 +144,8 @@ class MainActivity : AppCompatActivity() {
     fun getDatabaseValues() {
         todoEntityList.clear()
         todoEntityList.addAll(todoDatabase.todoDao().getTodoEntities())
+//        todoEntityList.addAll(todoDatabase.todoDao().getSelectedData(1))
+//        todoEntityList.addAll(todoDatabase.todoDao().getSelectedData(Calendar.getInstance().time))
         baseAdapter.notifyDataSetChanged()
     }
 
